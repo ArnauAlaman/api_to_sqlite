@@ -1,32 +1,29 @@
 import 'dart:convert';
 
-List<Employee> employeeFromJson(String str) =>
-    List<Employee>.from(json.decode(str).map((x) => Employee.fromJson(x)));
+List<Students> employeeFromJson(String str) =>
+    List<Students>.from(json.decode(str).map((x) => Students.fromJson(x)));
 
-String employeeToJson(List<Employee> data) =>
+String employeeToJson(List<Students> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Employee {
+class Students {
   int? id;
   String? email;
   String? firstName;
   String? lastName;
-  String? avatar;
 
-  Employee({
+  Students({
     this.id,
     this.email,
     this.firstName,
     this.lastName,
-    this.avatar,
   });
 
-  factory Employee.fromJson(Map<String, dynamic> json) => Employee(
+  factory Students.fromJson(Map<String, dynamic> json) => Students(
         id: json["id"],
         email: json["email"],
         firstName: json["firstName"],
         lastName: json["lastName"],
-        avatar: json["avatar"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -34,6 +31,5 @@ class Employee {
         "email": email,
         "firstName": firstName,
         "lastName": lastName,
-        "avatar": avatar,
       };
 }

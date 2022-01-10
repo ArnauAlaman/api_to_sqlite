@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:api_to_sqlite/src/models/employee_model.dart';
+import 'package:api_to_sqlite/src/models/student_model.dart';
 import 'package:path/path.dart';
 
 import 'package:path_provider/path_provider.dart';
@@ -13,8 +13,7 @@ class DBProvider {
 
   Future<Database?> get database async {
     // If database exists, return database
-    if (_database != null) return _database;
-
+    //if (_database != null) return _database;
     // If database don't exists, create one
     _database = await initDB();
 
@@ -24,42 +23,36 @@ class DBProvider {
   // Create the database and the Employee table
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, 'employee_manager.db');
+    final path = join(documentsDirectory.path, 'student_manager.db');
 
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
-      await db.execute('CREATE TABLE Employee('
-          'id INTEGER PRIMARY KEY,'
-          'email TEXT,'
-          'firstName TEXT,'
-          'lastName TEXT,'
-          'avatar TEXT'
-          ')');
+      await db.execute('CREATE Student (id INTEGER PRIMARY KEY,email TEXT, firstName TEXT,lastName TEXT)');
     });
   }
 
   // Insert employee on database
-  createEmployee(Employee newEmployee) async {
-    await deleteAllEmployees();
+  createStudent(Students newEmployee) async {
+    //await deleteStudents();
     final db = await database;
-    final res = await db?.insert('Employee', newEmployee.toJson());
+    final res = await db?.insert('Student', newEmployee.toJson());
 
     return res;
   }
 
   // Delete all employees
-  Future<int?> deleteAllEmployees() async {
+  Future<int?> deleteAllStudents() async {
     final db = await database;
-    final res = await db?.rawDelete('DELETE FROM Employee');
+    final res = await db?.rawDelete('DELETE FROM Student');
 
     return res;
   }
 
-  Future<List<Employee?>> getAllEmployees() async {
+  Future<List<Students?>> getAllStudents() async {
     final db = await database;
-    final res = await db?.rawQuery("SELECT * FROM EMPLOYEE");
+    final res = await db?.rawQuery("SELECT * FROM Student");
 
-    List<Employee> list = res!.isNotEmpty ? res.map((c) => Employee.fromJson(c)).toList() : [];
+    List<Students> list = res!.isNotEmpty ? res.map((c) => Students.fromJson(c)).toList() : [];
 
     return list;
   }
